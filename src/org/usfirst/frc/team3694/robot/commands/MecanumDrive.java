@@ -1,10 +1,8 @@
-package Commands;
+package org.usfirst.frc.team3694.robot.commands;
 
 import org.usfirst.frc.team3694.robot.OI;
 
 import Subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Victor;
 
 public class MecanumDrive {
 	

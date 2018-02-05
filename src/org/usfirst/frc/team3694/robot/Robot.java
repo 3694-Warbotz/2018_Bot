@@ -2,11 +2,12 @@
 package org.usfirst.frc.team3694.robot;
 
 
-import Commands.MecanumDrive;
-import Commands.lineDrive;
+import org.usfirst.frc.team3694.robot.commands.MecanumDrive;
+import org.usfirst.frc.team3694.robot.commands.lineDrive;
+import org.usfirst.frc.team3694.robot.commands.manDrive;
+import org.usfirst.frc.team3694.robot.subsystems.Sensors;
+
 import Subsystems.DriveTrain;
-import Commands.manDrive;
-import Subsystems.Sensors;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -64,10 +65,10 @@ public class Robot extends IterativeRobot {
 			case switchLeft:
 				if(gameData.charAt(0) == 'L')
 				{
-					Commands.switchLeft.SwitchLeftLeft();
+					org.usfirst.frc.team3694.robot.commands.switchLeft.SwitchLeftLeft();
 				} 
 				else {
-					Commands.switchLeft.SwitchLeftRight();
+					org.usfirst.frc.team3694.robot.commands.switchLeft.SwitchLeftRight();
 				}
 				break;
 			case switchMiddle:

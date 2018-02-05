@@ -1,7 +1,5 @@
 package org.usfirst.frc.team3694.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-
 /**
  *
  */

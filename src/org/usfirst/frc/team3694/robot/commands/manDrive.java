@@ -1,9 +1,7 @@
-package Commands;
-
-import Subsystems.Manipulator;
-import edu.wpi.first.wpilibj.Timer;
+package org.usfirst.frc.team3694.robot.commands;
 
 import org.usfirst.frc.team3694.robot.OI;
+import org.usfirst.frc.team3694.robot.subsystems.Manipulator;
 
 public class manDrive {
 	public static void Manipulator () {

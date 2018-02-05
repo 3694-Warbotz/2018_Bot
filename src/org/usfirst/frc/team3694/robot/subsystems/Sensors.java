@@ -1,7 +1,4 @@
-package Subsystems;
-
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
+package org.usfirst.frc.team3694.robot.subsystems;
 
 public class Sensors {
 	public static Gyro gyro = new AnalogGyro(1);
