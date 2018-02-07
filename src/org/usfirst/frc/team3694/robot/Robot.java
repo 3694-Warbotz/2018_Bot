@@ -5,9 +5,8 @@ package org.usfirst.frc.team3694.robot;
 import org.usfirst.frc.team3694.robot.commands.MecanumDrive;
 import org.usfirst.frc.team3694.robot.commands.lineDrive;
 import org.usfirst.frc.team3694.robot.commands.manDrive;
-import org.usfirst.frc.team3694.robot.subsystems.Sensors;
+import org.usfirst.frc.team3694.robot.subsystems.DriveTrain;
 
-import Subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,9 +24,8 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	
 	//Subsystems n' stuff
-	OI Interface = new OI();
-	DriveTrain drivetrain = new DriveTrain();
-	Sensors sensors = new Sensors();
+	public static OI Interface = new OI();
+	public static DriveTrain driveTrain = new DriveTrain();
 	
 	//FMS
 	String gameData;

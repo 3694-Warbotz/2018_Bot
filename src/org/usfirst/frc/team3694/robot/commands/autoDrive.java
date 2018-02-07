@@ -1,6 +1,6 @@
 package org.usfirst.frc.team3694.robot.commands;
 
-import Subsystems.DriveTrain;
+import org.usfirst.frc.team3694.robot.subsystems.DriveTrain;
 
 public class autoDrive {
 	public static void straightDrive () {

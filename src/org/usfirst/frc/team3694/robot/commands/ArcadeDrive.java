@@ -2,16 +2,15 @@ package org.usfirst.frc.team3694.robot.commands;
 
 import org.usfirst.frc.team3694.robot.OI;
 import org.usfirst.frc.team3694.robot.Robot;
-import org.usfirst.frc.team3694.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class MecanumDrive extends Command{
+public class ArcadeDrive extends Command {
 	
-	public MecanumDrive() {
+    public ArcadeDrive() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveTrain);
@@ -24,7 +23,7 @@ public class MecanumDrive extends Command{
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	Robot.driveTrain.customMecanumDrive(OI.leftDriveStick.getY(), OI.leftDriveStick.getX(), OI.leftDriveStick);
+    	Robot.driveTrain.arcadeDrive(OI.leftDriveStick.getY(), OI.leftDriveStick.getX());
     	
     }
 
@@ -41,5 +40,4 @@ public class MecanumDrive extends Command{
     // subsystems is scheduled to run
     protected void interrupted() {
     }
-	
 }
