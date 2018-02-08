@@ -2,14 +2,21 @@
 package org.usfirst.frc.team3694.robot;
 
 
+import org.usfirst.frc.team3694.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team3694.robot.commands.MecanumDrive;
+import org.usfirst.frc.team3694.robot.commands.RightArcadeDrive;
+import org.usfirst.frc.team3694.robot.commands.RightMecanumDrive;
+import org.usfirst.frc.team3694.robot.commands.TankDrive;
 import org.usfirst.frc.team3694.robot.commands.lineDrive;
 import org.usfirst.frc.team3694.robot.commands.manDrive;
 import org.usfirst.frc.team3694.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team3694.robot.subsystems.Vision;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,10 +29,12 @@ public class Robot extends IterativeRobot {
 	private static final String switchRight = "far Right putting cube into switch";
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
+	private SendableChooser<Command> driveChooser = new SendableChooser<>();
 	
 	//Subsystems n' stuff
 	public static OI Interface = new OI();
-	public static DriveTrain driveTrain = new DriveTrain();
+	public static DriveTrain driveTrain;
+	public static Vision camera;
 	
 	//FMS
 	String gameData;
@@ -40,8 +49,20 @@ public class Robot extends IterativeRobot {
 		m_chooser.addObject("far Right putting cube into switch", switchRight);
 		SmartDashboard.putData("Auto choices", m_chooser);
 		
+		//Choose which joystick and drive mode you want. Lots of flexibility.
+		driveChooser.addDefault("Left Stick Mecanum Drive", new MecanumDrive());
+		driveChooser.addDefault("Right Stick Mecanum Drive", new RightMecanumDrive());
+		driveChooser.addDefault("Left Stick Arcade Drive", new ArcadeDrive());
+		driveChooser.addDefault("Right Stick Arcade Drive", new RightArcadeDrive());
+		driveChooser.addDefault("Tank Drive", new TankDrive());
+		SmartDashboard.putData("Drive Type", driveChooser);
+		
+		driveTrain = new DriveTrain();
+		camera = new Vision();
+		
 		//FMS
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
 	}
 
 	
@@ -54,6 +75,13 @@ public class Robot extends IterativeRobot {
 	//This function is called periodically during autonomous.
 	@Override
 	public void autonomousPeriodic() {
+		
+		Scheduler.getInstance().run();
+		
+		char ourSwitch = gameData.charAt(0);
+		char scale = gameData.charAt(1);
+		char theirSwitch = gameData.charAt(2);
+		
 		switch (m_autoSelected) {
 			case crossLine:
 				default:
@@ -61,7 +89,7 @@ public class Robot extends IterativeRobot {
 					Timer.delay(3.00);
 					break;
 			case switchLeft:
-				if(gameData.charAt(0) == 'L')
+				if(ourSwitch == 'L')
 				{
 					org.usfirst.frc.team3694.robot.commands.switchLeft.SwitchLeftLeft();
 				} 
@@ -70,7 +98,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case switchMiddle:
-				if(gameData.charAt(0) == 'L')
+				if(ourSwitch == 'L')
 				{
 					//Put left auto code here
 				} 
@@ -79,7 +107,7 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 			case switchRight:
-				if(gameData.charAt(0) == 'L')
+				if(ourSwitch == 'L')
 				{
 					//Put left auto code here
 				} 
@@ -89,14 +117,15 @@ public class Robot extends IterativeRobot {
 				break;	
 		}
 	}
-
+	
+	public void teleopInit(){
+		driveChooser.getSelected().start();
+	}
+	
 	//This function is called periodically during operator control.
 	@Override
 	public void teleopPeriodic() {
-		while (isOperatorControl() && isEnabled()) {
-			MecanumDrive.drive();
-			manDrive.Manipulator();
-		}
+		Scheduler.getInstance().run();
 	}
 
 	
