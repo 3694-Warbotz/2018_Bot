@@ -23,12 +23,12 @@ public class RobotMap {
 	//Chassis Motor and Variables
 	public static Victor frontLeft = new Victor(0);
 	public static Victor frontRight = new Victor(1);
-	public static Victor backLeft = new Victor(2);
-	public static Victor backRight = new Victor(3);
-	public static SpeedControllerGroup leftChassis = new SpeedControllerGroup(frontLeft, backLeft);
-	public static SpeedControllerGroup rightChassis = new SpeedControllerGroup(frontRight, backRight);
+	public static Victor rearLeft = new Victor(2);
+	public static Victor rearRight = new Victor(3);
+	public static SpeedControllerGroup leftChassis = new SpeedControllerGroup(frontLeft, rearLeft);
+	public static SpeedControllerGroup rightChassis = new SpeedControllerGroup(frontRight, rearRight);
 	public static DifferentialDrive differentialDrive = new DifferentialDrive(leftChassis, rightChassis);
-	public static MecanumDrive mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);
+	public static MecanumDrive mecanumDrive = new MecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
 	
 	//Encoders For Chassis Wheels
 	public static Encoder frontLeftEnc = new Encoder(0, 1, false, Encoder.EncodingType.k4X);

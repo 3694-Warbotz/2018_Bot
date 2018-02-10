@@ -1,21 +1,21 @@
 package org.usfirst.frc.team3694.robot.commands;
 
-import org.usfirst.frc.team3694.robot.OI;
 import org.usfirst.frc.team3694.robot.Robot;
-import org.usfirst.frc.team3694.robot.RobotMap;
-import org.usfirst.frc.team3694.robot.subsystems.DriveTrain.joyRampType;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class RightMecanumDrive extends Command{
+public class AutonomousStrafe extends Command {
 	
-	public RightMecanumDrive() {
+	double time, speed;
+    public AutonomousStrafe(double t, double s) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.driveTrain);
+    	time = t;
+    	speed = s;
     }
 
     // Called just before this Command runs the first time
@@ -24,9 +24,6 @@ public class RightMecanumDrive extends Command{
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
-    	Robot.driveTrain.customMecanumDrive(OI.rightDriveStick.getY(), OI.rightDriveStick.getX(), OI.rightDriveStick, joyRampType.cubic);
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -42,5 +39,4 @@ public class RightMecanumDrive extends Command{
     // subsystems is scheduled to run
     protected void interrupted() {
     }
-	
 }

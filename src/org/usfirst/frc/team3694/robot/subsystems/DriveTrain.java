@@ -23,8 +23,8 @@ public class DriveTrain extends PIDSubsystem {
 	//Chassis Motor and Variables
 	public static Victor frontLeft = RobotMap.frontLeft;
 	public static Victor frontRight = RobotMap.frontRight;
-	public static Victor backLeft = RobotMap.backLeft;
-	public static Victor backRight = RobotMap.backRight;
+	public static Victor rearLeft = RobotMap.rearLeft;
+	public static Victor rearRight = RobotMap.rearRight;
 	public static SpeedControllerGroup leftChassis = RobotMap.leftChassis;
 	public static SpeedControllerGroup rightChassis = RobotMap.rightChassis;
 	public static DifferentialDrive differentialDrive = RobotMap.differentialDrive;
@@ -32,6 +32,12 @@ public class DriveTrain extends PIDSubsystem {
 	//Encoders For Chassis Wheels
 	public static Encoder frontLeftEnc = RobotMap.frontLeftEnc;
 	public static Encoder frontRightEnc = RobotMap.frontRightEnc;
+	
+	public static joyRampType joyRampSelection;
+	
+	public enum joyRampType{
+    	linear, cubic, sigmoid
+    }
 	
     // Initialize your subsystem here
     public DriveTrain() {
@@ -41,6 +47,7 @@ public class DriveTrain extends PIDSubsystem {
         //                  to
         enable();
     }
+    
     
     public void arcadeDrive(double xSpeed, double zRot){
     	differentialDrive.arcadeDrive(xSpeed, zRot);
@@ -54,15 +61,40 @@ public class DriveTrain extends PIDSubsystem {
     	differentialDrive.tankDrive(leftSpeed, rightSpeed);
     }
     
-    public static void setSpeeds(double fL, double bL, double fR, double bR){
+    public void setSpeeds(double fL, double bL, double fR, double bR){
 		frontLeft.set(fL);
-		backLeft.set(bL);
+		rearLeft.set(bL);
 		frontRight.set(fR);
-		backRight.set(bR);
+		rearRight.set(bR);
 	}
     
-    public void customMecanumDrive(double ySpeed, double xSpeed, Joystick driveStick){
-    	//Get axis values from joystick to avoid calling methods to many times.
+    public void resetEncoders(){
+    	frontLeftEnc.reset();
+    	frontRightEnc.reset();
+    }
+    
+    public void customMecanumDrive(double joyY, double joyX, Joystick driveStick, joyRampType rampType){
+    	
+    	double xSpeed, ySpeed;
+    	joyRampSelection = rampType;
+    	
+    	
+    	//Joystick ramp types
+    	switch(rampType){
+    		case linear:
+    			//Joystick value = speed
+    			xSpeed = joyX;
+    			ySpeed = joyY;
+    		case sigmoid:
+    			//The higher the speed, the harder to ramp up
+    			xSpeed = Math.round((2/(1+Math.pow(Math.E, (-6*joyX))) - 1)*1000)/1000;
+    			ySpeed = Math.round((2/(1+Math.pow(Math.E, (-6*joyY))) - 1)*1000)/1000;
+    		case cubic:
+    			//The higher the speed, the easier to ramp up
+    			xSpeed = 0.8*Math.pow(joyX, 3) + 0.2*joyX;
+    			ySpeed = 0.8*Math.pow(joyY, 3) + 0.2*joyY;
+    			
+    	}
     			
     			//If trigger button is pressed down, strafe, else function normally.
     			while(driveStick.getTrigger() == true){
@@ -95,11 +127,15 @@ public class DriveTrain extends PIDSubsystem {
         // Return your input value for the PID loop
         // e.g. a sensor, like a potentiometer:
         // yourPot.getAverageVoltage() / kYourMaxVoltage;
-        return 0.0;
+        return Math.abs(frontRightEnc.get());
     }
 
     protected void usePIDOutput(double output) {
         // Use output to drive your system, like a motor
         // e.g. yourMotor.set(output);
+    	frontLeft.set(output);
+    	frontRight.set(output);
+    	rearLeft.set(output);
+    	rearRight.set(output);
     }
 }
