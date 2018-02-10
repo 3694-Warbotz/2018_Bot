@@ -33,11 +33,6 @@ public class DriveTrain extends PIDSubsystem {
 	public static Encoder frontLeftEnc = RobotMap.frontLeftEnc;
 	public static Encoder frontRightEnc = RobotMap.frontRightEnc;
 	
-	public static joyRampType joyRampSelection;
-	
-	public enum joyRampType{
-    	linear, cubic, sigmoid
-    }
 	
     // Initialize your subsystem here
     public DriveTrain() {
@@ -68,31 +63,38 @@ public class DriveTrain extends PIDSubsystem {
 		rearRight.set(bR);
 	}
     
+    public void strafe(double speed){
+    	if(speed < 0){
+    		setSpeeds(speed, -speed, -speed, speed);
+    	}else if (speed > 0){
+    		setSpeeds(-speed, speed, speed, -speed);
+    	}
+    }
+    
     public void resetEncoders(){
     	frontLeftEnc.reset();
     	frontRightEnc.reset();
     }
     
-    public void customMecanumDrive(double joyY, double joyX, Joystick driveStick, joyRampType rampType){
+    public void customMecanumDrive(double joyY, double joyX, Joystick driveStick, String rampType){
     	
-    	double xSpeed, ySpeed;
-    	joyRampSelection = rampType;
-    	
+    	double xSpeed = 0;
+    	double ySpeed = 0;
     	
     	//Joystick ramp types
     	switch(rampType){
-    		case linear:
+    		case "linear":
     			//Joystick value = speed
     			xSpeed = joyX;
     			ySpeed = joyY;
-    		case sigmoid:
+    		case "sigmoid":
     			//The higher the speed, the harder to ramp up
     			xSpeed = Math.round((2/(1+Math.pow(Math.E, (-6*joyX))) - 1)*1000)/1000;
     			ySpeed = Math.round((2/(1+Math.pow(Math.E, (-6*joyY))) - 1)*1000)/1000;
-    		case cubic:
+    		case "inverseSigmoid":
     			//The higher the speed, the easier to ramp up
-    			xSpeed = 0.8*Math.pow(joyX, 3) + 0.2*joyX;
-    			ySpeed = 0.8*Math.pow(joyY, 3) + 0.2*joyY;
+    			xSpeed = Math.round((-Math.log(2/(joyX + 1) - 1)/6)*1000)/1000;
+    			ySpeed = Math.round((-Math.log(2/(joyY + 1) - 1)/6)*1000)/1000;
     			
     	}
     			

@@ -2,6 +2,7 @@ package org.usfirst.frc.team3694.robot.commands;
 
 import org.usfirst.frc.team3694.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class AutonomousStrafe extends Command {
 	
 	double time, speed;
+	Timer timer;
     public AutonomousStrafe(double t, double s) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -20,15 +22,19 @@ public class AutonomousStrafe extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	timer.start();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if(timer.get() < time){
+    		Robot.driveTrain.strafe(speed);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return (timer.get() >= time);
     }
 
     // Called once after isFinished returns true

@@ -2,9 +2,6 @@ package org.usfirst.frc.team3694.robot.commands;
 
 import org.usfirst.frc.team3694.robot.OI;
 import org.usfirst.frc.team3694.robot.Robot;
-import org.usfirst.frc.team3694.robot.RobotMap;
-import org.usfirst.frc.team3694.robot.subsystems.DriveTrain.joyRampType;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -25,7 +22,7 @@ public class MecanumDrive extends Command{
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	Robot.driveTrain.customMecanumDrive(OI.leftDriveStick.getY(), OI.leftDriveStick.getX(), OI.leftDriveStick, joyRampType.cubic);
+    	Robot.driveTrain.customMecanumDrive(OI.leftDriveStick.getY(), OI.leftDriveStick.getX(), OI.leftDriveStick, Robot.joyRampSelection);
     	
     }
 

@@ -8,7 +8,6 @@ import org.usfirst.frc.team3694.robot.commands.RightArcadeDrive;
 import org.usfirst.frc.team3694.robot.commands.RightMecanumDrive;
 import org.usfirst.frc.team3694.robot.commands.TankDrive;
 import org.usfirst.frc.team3694.robot.commands.lineDrive;
-import org.usfirst.frc.team3694.robot.commands.manDrive;
 import org.usfirst.frc.team3694.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3694.robot.subsystems.Vision;
 
@@ -30,6 +29,9 @@ public class Robot extends IterativeRobot {
 	private String m_autoSelected;
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	private SendableChooser<Command> driveChooser = new SendableChooser<>();
+	private SendableChooser<String> joyRampChooser = new SendableChooser<>();
+	
+	public static String joyRampSelection = "";
 	
 	//Subsystems n' stuff
 	public static OI Interface = new OI();
@@ -51,17 +53,24 @@ public class Robot extends IterativeRobot {
 		
 		//Choose which joystick and drive mode you want. Lots of flexibility.
 		driveChooser.addDefault("Left Stick Mecanum Drive", new MecanumDrive());
-		driveChooser.addDefault("Right Stick Mecanum Drive", new RightMecanumDrive());
-		driveChooser.addDefault("Left Stick Arcade Drive", new ArcadeDrive());
-		driveChooser.addDefault("Right Stick Arcade Drive", new RightArcadeDrive());
-		driveChooser.addDefault("Tank Drive", new TankDrive());
+		driveChooser.addObject("Right Stick Mecanum Drive", new RightMecanumDrive());
+		driveChooser.addObject("Left Stick Arcade Drive", new ArcadeDrive());
+		driveChooser.addObject("Right Stick Arcade Drive", new RightArcadeDrive());
+		driveChooser.addObject("Tank Drive", new TankDrive());
 		SmartDashboard.putData("Drive Type", driveChooser);
+		
+		joyRampChooser.addDefault("Linear Ramping", "linear");
+		joyRampChooser.addObject("Inverse Sigmoid Ramping (easier at higher speeds)", "inverseSigmoid");
+		joyRampChooser.addObject("Sigmoid Ramping (harder at higher speeds)", "sigmoid");
+		SmartDashboard.putData("Joystick Ramp Type", joyRampChooser);
 		
 		driveTrain = new DriveTrain();
 		camera = new Vision();
 		
 		//FMS
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		
+		joyRampSelection = joyRampChooser.getSelected();
 		
 	}
 
