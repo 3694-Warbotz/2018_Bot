@@ -95,19 +95,18 @@ public class DriveTrain extends PIDSubsystem {
     			//The higher the speed, the easier to ramp up
     			xSpeed = Math.round((-Math.log(2/(joyX + 1) - 1)/6)*1000)/1000;
     			ySpeed = Math.round((-Math.log(2/(joyY + 1) - 1)/6)*1000)/1000;
+    		case "cubic":
+    			//The higher the speed, the easier to ramp up, but starts at lower speed than inverse sigmoid
+    			xSpeed = Math.pow(joyX, 3);
+    			ySpeed = Math.pow(joyY, 3);
     			
     	}
     			
     			//If trigger button is pressed down, strafe, else function normally.
     			while(driveStick.getTrigger() == true){
-
-    				//Strafe left if joystick is left, else strafe right. Side that you want to go towards spins inwards while other spins outwards.
-    				if(xSpeed < 0){
-    					setSpeeds(xSpeed, -xSpeed, -xSpeed, xSpeed);
-    				}else if(xSpeed > 0){
-    					setSpeeds(-xSpeed, xSpeed, xSpeed, -xSpeed);
-    				}
     				
+    				//Strafe left if joystick is left, else strafe right. Side that you want to go towards spins inwards while other spins outwards.
+    				strafe(xSpeed);
     			}
     			while (driveStick.getTrigger() == false){
     				//Basically arcadeDrive

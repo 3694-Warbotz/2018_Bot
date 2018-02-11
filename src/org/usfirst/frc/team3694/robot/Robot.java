@@ -3,11 +3,17 @@ package org.usfirst.frc.team3694.robot;
 
 
 import org.usfirst.frc.team3694.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team3694.robot.commands.AutonomousDrive;
 import org.usfirst.frc.team3694.robot.commands.MecanumDrive;
 import org.usfirst.frc.team3694.robot.commands.RightArcadeDrive;
 import org.usfirst.frc.team3694.robot.commands.RightMecanumDrive;
 import org.usfirst.frc.team3694.robot.commands.TankDrive;
-import org.usfirst.frc.team3694.robot.commands.lineDrive;
+import org.usfirst.frc.team3694.robot.commands.switchLeftLeft;
+import org.usfirst.frc.team3694.robot.commands.switchLeftRight;
+import org.usfirst.frc.team3694.robot.commands.switchMiddleLeft;
+import org.usfirst.frc.team3694.robot.commands.switchMiddleRight;
+import org.usfirst.frc.team3694.robot.commands.switchRightLeft;
+import org.usfirst.frc.team3694.robot.commands.switchRightRight;
 import org.usfirst.frc.team3694.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team3694.robot.subsystems.Vision;
 
@@ -30,6 +36,13 @@ public class Robot extends IterativeRobot {
 	private SendableChooser<String> m_chooser = new SendableChooser<>();
 	private SendableChooser<Command> driveChooser = new SendableChooser<>();
 	private SendableChooser<String> joyRampChooser = new SendableChooser<>();
+	private switchLeftLeft sLL = new switchLeftLeft();
+	private switchLeftRight sLR = new switchLeftRight();
+	private switchMiddleLeft sML = new switchMiddleLeft();
+	private switchMiddleRight sMR = new switchMiddleRight();
+	private switchRightLeft sRL = new switchRightLeft();
+	private switchRightRight sRR = new switchRightRight();
+	private AutonomousDrive crossLineAutonomous = new AutonomousDrive(140.0);
 	
 	public static String joyRampSelection = "";
 	
@@ -62,6 +75,7 @@ public class Robot extends IterativeRobot {
 		joyRampChooser.addDefault("Linear Ramping", "linear");
 		joyRampChooser.addObject("Inverse Sigmoid Ramping (easier at higher speeds)", "inverseSigmoid");
 		joyRampChooser.addObject("Sigmoid Ramping (harder at higher speeds)", "sigmoid");
+		joyRampChooser.addObject("Cubic", "cubic");
 		SmartDashboard.putData("Joystick Ramp Type", joyRampChooser);
 		
 		driveTrain = new DriveTrain();
@@ -94,34 +108,33 @@ public class Robot extends IterativeRobot {
 		switch (m_autoSelected) {
 			case crossLine:
 				default:
-					lineDrive.drive();	
-					Timer.delay(3.00);
+					crossLineAutonomous.start();
 					break;
 			case switchLeft:
 				if(ourSwitch == 'L')
 				{
-					org.usfirst.frc.team3694.robot.commands.switchLeft.SwitchLeftLeft();
+					sLL.start();
 				} 
 				else {
-					org.usfirst.frc.team3694.robot.commands.switchLeft.SwitchLeftRight();
+					sLR.start();
 				}
 				break;
 			case switchMiddle:
 				if(ourSwitch == 'L')
 				{
-					//Put left auto code here
+					sML.start();
 				} 
 				else {
-					//Put right auto code here
+					sMR.start();
 				}
 				break;
 			case switchRight:
 				if(ourSwitch == 'L')
 				{
-					//Put left auto code here
+					sRL.start();
 				} 
 				else {
-					//Put right auto code here
+					sRR.start();
 				}
 				break;	
 		}
